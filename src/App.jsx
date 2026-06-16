@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Mic2, ShieldCheck, UserPlus, MessageCircle, ChevronDown, ChevronUp, Pencil, Check } from 'lucide-react';
+import { Calendar, Clock, User, Mic2, ShieldCheck, UserPlus, MessageCircle, ChevronDown, ChevronUp, Pencil, Check, HelpCircle } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import './App.css';
 
@@ -301,8 +301,27 @@ function App() {
   return (
     <div className="app-container">
       <nav className="top-nav">
-        <div className="top-nav-header">
+        <div className="top-nav-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: '1rem' }}>
           <h1><Calendar size={28} /> Congresso "Felicidade Eterna" - Presidência</h1>
+          <a 
+            href="https://notebooklm.google.com/notebook/086734d2-8ddf-4701-9973-8223c7f19edc" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              padding: '0.5rem', 
+              borderRadius: '50%', 
+              background: 'var(--accent-color)', 
+              color: 'var(--bg-color)',
+              textDecoration: 'none',
+              boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+            }}
+            title="Dúvidas? Pergunte ao NotebookLM"
+          >
+            <HelpCircle size={24} />
+          </a>
         </div>
         
         <div className="tabs-container">
