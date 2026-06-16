@@ -46,23 +46,73 @@ const PersonCard = ({ person, onPresenceChange, onNotesChange, onWaChange }) => 
             </span>
           )}
           <h3 style={{ margin: 0, minWidth: '150px' }}>{person.orador || 'A definir'}</h3>
-          <p style={{ margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>{person.tema || ''}</p>
+          <p className="person-theme" style={{ margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>{person.tema || ''}</p>
         </div>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: '1rem' }}>
           {person.hora && (
-            <span style={{ fontSize: '0.9rem', color: 'var(--accent-color)', fontWeight: 'bold' }}>{person.hora}</span>
+            <span className="mobile-hidden" style={{ fontSize: '0.9rem', color: 'var(--accent-color)', fontWeight: 'bold' }}>{person.hora}</span>
           )}
-          <div style={{ color: 'var(--text-secondary)' }}>
+
+          <div onClick={(e) => e.stopPropagation()}>
+            {isEditingWa ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <input 
+                  type="text"
+                  value={waValue}
+                  onChange={(e) => setWaValue(e.target.value)}
+                  placeholder="55119..."
+                  className="notes-input"
+                  style={{ width: '120px', minHeight: 'auto', padding: '0.4rem 0.75rem', fontSize: '0.85rem', background: 'var(--bg-color)' }}
+                  autoFocus
+                  onKeyDown={(e) => e.key === 'Enter' && saveWa()}
+                />
+                <button 
+                  onClick={saveWa}
+                  style={{ padding: '0.4rem', background: 'var(--success-color)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                >
+                  <Check size={16} />
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {person.wa ? (
+                  <a 
+                    href={`https://wa.me/${person.wa.replace(/\D/g, '')}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="wa-button"
+                    style={{ padding: '0.5rem', borderRadius: '50%', flexShrink: 0 }}
+                    title="WhatsApp"
+                  >
+                    <MessageCircle size={18} />
+                  </a>
+                ) : (
+                  <span className="mobile-hidden" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>S/ WA</span>
+                )}
+                
+                <button 
+                  onClick={() => setIsEditingWa(true)}
+                  className="mobile-hidden"
+                  style={{ padding: '0.5rem', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  title="Editar WhatsApp"
+                >
+                  <Pencil size={14} />
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="mobile-hidden" style={{ color: 'var(--text-secondary)' }}>
             {isExpanded ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
           </div>
         </div>
       </div>
 
       {isExpanded && (
-        <div className="person-details" style={{ borderTop: '1px solid var(--border-color)', padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(0,0,0,0.2)' }}>
+        <div className="person-details mobile-hidden" style={{ borderTop: '1px solid var(--border-color)', padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(0,0,0,0.2)' }}>
           
-          <div style={{ display: 'flex', gap: '1rem', flexShrink: 0 }}>
+          <div className="mobile-hidden" style={{ display: 'flex', gap: '1rem', flexShrink: 0 }}>
             <label className="checkbox-label" style={{ fontSize: '0.85rem', gap: '0.5rem' }}>
               <input 
                 type="checkbox" 
@@ -89,7 +139,7 @@ const PersonCard = ({ person, onPresenceChange, onNotesChange, onWaChange }) => 
             </label>
           </div>
 
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="mobile-hidden" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Obs:</span>
             <input 
               type="text"
@@ -100,53 +150,6 @@ const PersonCard = ({ person, onPresenceChange, onNotesChange, onWaChange }) => 
               style={{ minHeight: 'auto', padding: '0.4rem 0.75rem', flex: 1, fontSize: '0.85rem' }}
             />
           </div>
-
-          {isEditingWa ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <input 
-                type="text"
-                value={waValue}
-                onChange={(e) => setWaValue(e.target.value)}
-                placeholder="55119..."
-                className="notes-input"
-                style={{ width: '120px', minHeight: 'auto', padding: '0.4rem 0.75rem', fontSize: '0.85rem' }}
-                autoFocus
-                onKeyDown={(e) => e.key === 'Enter' && saveWa()}
-              />
-              <button 
-                onClick={saveWa}
-                style={{ padding: '0.4rem', background: 'var(--success-color)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-              >
-                <Check size={16} />
-              </button>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              {person.wa ? (
-                <a 
-                  href={`https://wa.me/${person.wa.replace(/\D/g, '')}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="wa-button"
-                  style={{ padding: '0.5rem', borderRadius: '50%', flexShrink: 0 }}
-                  title="WhatsApp"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <MessageCircle size={18} />
-                </a>
-              ) : (
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>S/ WA</span>
-              )}
-              
-              <button 
-                onClick={() => setIsEditingWa(true)}
-                style={{ padding: '0.5rem', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                title="Editar WhatsApp"
-              >
-                <Pencil size={14} />
-              </button>
-            </div>
-          )}
           
         </div>
       )}
@@ -237,21 +240,21 @@ function App() {
   };
 
   const days = [
-    { id: 'dia1', label: 'Sexta-feira' },
-    { id: 'dia2', label: 'Sábado' },
-    { id: 'dia3', label: 'Domingo' }
+    { id: 'dia1', desktopLabel: 'Sexta-feira', mobileLabel: 'Sex' },
+    { id: 'dia2', desktopLabel: 'Sábado', mobileLabel: 'Sáb' },
+    { id: 'dia3', desktopLabel: 'Domingo', mobileLabel: 'Dom' }
   ];
 
   const sessions = [
-    { id: 'manha', label: 'Manhã' },
-    { id: 'tarde', label: 'Tarde' }
+    { id: 'manha', desktopLabel: 'Manhã', mobileLabel: 'Manhã' },
+    { id: 'tarde', desktopLabel: 'Tarde', mobileLabel: 'Tarde' }
   ];
 
   const categories = [
-    { id: 'presidentes', label: 'Presidente', icon: ShieldCheck },
-    { id: 'oracao', label: 'Oração', icon: User },
-    { id: 'oradores', label: 'Discursos', icon: Mic2 },
-    { id: 'substitutos', label: 'Substitutos', icon: UserPlus },
+    { id: 'presidentes', desktopLabel: 'Presidente', mobileLabel: 'Pres', icon: ShieldCheck },
+    { id: 'oracao', desktopLabel: 'Oração', mobileLabel: 'Oração', icon: User },
+    { id: 'oradores', desktopLabel: 'Discursos', mobileLabel: 'Disc', icon: Mic2 },
+    { id: 'substitutos', desktopLabel: 'Substitutos', mobileLabel: 'Subst', icon: UserPlus },
   ];
 
   const handlePresenceChange = async (personId, field, currentValue) => {
@@ -293,7 +296,7 @@ function App() {
   );
   
   const ActiveIcon = categories.find(c => c.id === activeCategory)?.icon || User;
-  const activeTitle = categories.find(c => c.id === activeCategory)?.label || '';
+  const activeTitle = categories.find(c => c.id === activeCategory)?.desktopLabel || '';
 
   return (
     <div className="app-container">
@@ -309,7 +312,8 @@ function App() {
               className={`tab-button ${activeDay === day.id ? 'active' : ''}`}
               onClick={() => setActiveDay(day.id)}
             >
-              {day.label}
+              <span className="desktop-text">{day.desktopLabel}</span>
+              <span className="mobile-text">{day.mobileLabel}</span>
             </button>
           ))}
         </div>
@@ -322,7 +326,8 @@ function App() {
               onClick={() => setActiveSession(session.id)}
             >
               <Clock size={16} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom' }} />
-              {session.label}
+              <span className="desktop-text">{session.desktopLabel}</span>
+              <span className="mobile-text">{session.mobileLabel}</span>
             </button>
           ))}
         </div>
@@ -333,11 +338,12 @@ function App() {
             return (
               <button
                 key={cat.id}
-                className={`tab-button ${activeCategory === cat.id ? 'active' : ''}`}
+                className={`tab-button category-tab ${activeCategory === cat.id ? 'active' : ''}`}
                 onClick={() => setActiveCategory(cat.id)}
               >
                 <IconComponent size={16} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom' }} />
-                {cat.label}
+                <span className="desktop-text">{cat.desktopLabel}</span>
+                <span className="mobile-text">{cat.mobileLabel}</span>
               </button>
             );
           })}

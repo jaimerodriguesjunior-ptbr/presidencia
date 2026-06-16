@@ -233,3 +233,81 @@
   outline: none;
   border-color: var(--accent-color);
 }
+
+/* RESPONSIVIDADE PARA CELULAR */
+@media (min-width: 769px) {
+  .mobile-text {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-text {
+    display: none !important;
+  }
+  
+  .mobile-hidden {
+    display: none !important;
+  }
+
+  .person-theme {
+    display: none !important;
+  }
+  
+  .top-nav {
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .top-nav-header h1 {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+
+  .tabs-container {
+    padding-bottom: 0.25rem;
+  }
+
+  .tab-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .category-tab .mobile-text {
+    display: none !important;
+  }
+
+  .category-tab svg {
+    margin-right: 0 !important;
+    width: 20px;
+    height: 20px;
+  }
+
+  .person-header {
+    padding: 0.5rem;
+  }
+
+  .person-info {
+    gap: 0.5rem !important;
+  }
+
+  .person-info h3 {
+    font-size: 0.9rem;
+    min-width: 0 !important;
+  }
+
+  .person-info span {
+    padding: 0.1rem 0.4rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  .wa-container {
+    justify-content: center !important;
+    width: 100%;
+  }
+
+  .wa-button {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
