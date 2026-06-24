@@ -240,7 +240,7 @@ function App() {
   };
 
   const days = [
-    { id: 'dia1', desktopLabel: 'Sexta-feira', mobileLabel: 'Sex' },
+    { id: 'dia1', desktopLabel: 'Sexta-feira', mobileLabel: '6ª' },
     { id: 'dia2', desktopLabel: 'Sábado', mobileLabel: 'Sáb' },
     { id: 'dia3', desktopLabel: 'Domingo', mobileLabel: 'Dom' }
   ];
