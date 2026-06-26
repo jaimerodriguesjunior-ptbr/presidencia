@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Calendar, Clock, User, Mic2, ShieldCheck, UserPlus, MessageCircle, ChevronDown, ChevronUp, Pencil, Check, HelpCircle } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import './App.css';
@@ -271,14 +271,23 @@ function App() {
     }
   };
 
-  const handleNotesChange = async (personId, value) => {
+  const notesDebounceRef = useRef({});
+
+  const handleNotesChange = useCallback((personId, value) => {
+    // Atualiza o estado local imediatamente para o campo responder na hora
     setData(prev => prev.map(p => p.id === personId ? { ...p, notes: value } : p));
-    
-    await supabase
-      .from('designacoes')
-      .update({ notes: value })
-      .eq('id', personId);
-  };
+
+    // Cancela o timer anterior desse item e agenda um novo salvamento
+    if (notesDebounceRef.current[personId]) {
+      clearTimeout(notesDebounceRef.current[personId]);
+    }
+    notesDebounceRef.current[personId] = setTimeout(async () => {
+      await supabase
+        .from('designacoes')
+        .update({ notes: value })
+        .eq('id', personId);
+    }, 600);
+  }, []);
 
   const handleWaChange = async (personId, value) => {
     setData(prev => prev.map(p => p.id === personId ? { ...p, wa: value } : p));
